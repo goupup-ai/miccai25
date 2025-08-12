@@ -65,9 +65,9 @@ To alleviate these issues, we introduce a Frequency-enhanced Multi-granularity C
 
 ## **Contributions** 
 
-**1.**We propose FMC-Net that leverages wavelet transform to avoid information loss and enhances high and low-frequency features to address the challenges of image blurring and the high similarity of vertebral structures.
+**1.** We propose FMC-Net that leverages wavelet transform to avoid information loss and enhances high and low-frequency features to address the challenges of image blurring and the high similarity of vertebral structures.
 
-**2.**For the high-frequency components, we introduce the HFR to restore fine grained details. For the low-frequency components, we employ the MG-SSM to capture spatially-varying long-range dependencies.
+**2.** For the high-frequency components, we introduce the HFR to restore fine grained details. For the low-frequency components, we employ the MG-SSM to capture spatially-varying long-range dependencies.
 
 **3.** Experiments on VERSE2019 and LUMBAR datasets demonstrate the superior performance of FMC-Net compared to other state-of-the-art approaches.
 
@@ -94,6 +94,7 @@ To alleviate these issues, we introduce a Frequency-enhanced Multi-granularity C
 <p align="center">
     <img src="assets/seg.png" alt="Qualitative results with different methods" style="width:100%;">
 </p>
+
 ---
 
 ## **Reproduction**
