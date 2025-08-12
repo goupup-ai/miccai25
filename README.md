@@ -3,11 +3,7 @@ Network for Efficient Vertebrae Segmentation</h1>
 
 
   <p align="center">
-<<<<<<< HEAD
-    <img src="assets/LOGO.png" alt="Description of the image" style="width:90%;">
-=======
     <img src="assets/Logo.png" alt="Description of the image" width="400" height="395">
->>>>>>> e9034d47f4260b01cf206c7e89f931dd5e220f76
   <p align="center">
 
 
@@ -83,25 +79,13 @@ To alleviate these issues, we introduce a Frequency-enhanced Multi-granularity C
     <img src="assets/visualization.png" alt="seg Results" style="width:100%;">
 </p>
 
-<<<<<<< HEAD
-
-
-
 ---
-
-
-=======
->>>>>>> e9034d47f4260b01cf206c7e89f931dd5e220f76
 ### Ablation Studies [LUMBAR]
 
 <p align="center">
     <img src="assets/Ablation.png" alt="Ablation Results" style="width:100%;">
 </p>
-<<<<<<< HEAD
 
-
-=======
->>>>>>> e9034d47f4260b01cf206c7e89f931dd5e220f76
 ---
 ## **Visualizations**
 
@@ -110,12 +94,6 @@ To alleviate these issues, we introduce a Frequency-enhanced Multi-granularity C
 <p align="center">
     <img src="assets/seg.png" alt="Qualitative results with different methods" style="width:100%;">
 </p>
-<<<<<<< HEAD
-=======
----
-    <img src="results/visualization.png" alt="Qualitative results with different methods" style="width:100%;">
-</p>
->>>>>>> e9034d47f4260b01cf206c7e89f931dd5e220f76
 ---
 
 ## **Reproduction**
