@@ -105,8 +105,8 @@ To alleviate these issues, we introduce a Frequency-enhanced Multi-granularity C
 
 ### Datasets
 
-- **VERSE2019**: [Google Drive](https://drive.google.com/drive/folders/1EscBadX-wMAT56_It5lXY-S3-b5nK1wH)  
-- **Lumbar**: [Baidu Pan](https://pan.baidu.com/s/1xqqh7N4Lctm3RcUdskG0Ug) 
+- [VerSe'19: Large Scale Vertebrae Segmentation Challenge](https://verse2019.grand-challenge.org/)
+- **Lumbar**: [Lumbar vertebral body and intervertebral disc segmentation in multi-scanner and multi-modal MRI](https://osf.io/qx5rt/) 
 
 ---
 
