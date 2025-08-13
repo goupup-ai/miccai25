@@ -146,16 +146,11 @@ class nnUNetTrainer(object):
         # self.initial_lr = 0.02
         self.weight_decay = 3e-5
         self.oversample_foreground_percent = 0.33
-        # self.num_iterations_per_epoch = 240   # 80
-        # self.num_val_iterations_per_epoch = 40  # 10
-        # self.num_iterations_per_epoch = 220
-        # self.num_val_iterations_per_epoch = 40
 
         self.num_iterations_per_epoch = 250
         self.num_val_iterations_per_epoch = 50
 
-        # self.num_epochs = 1000
-        self.num_epochs = 1200
+        self.num_epochs = 1000
         self.current_epoch = 0
         self.enable_deep_supervision = True
 
@@ -919,7 +914,6 @@ class nnUNetTrainer(object):
         data = batch['data']
         target = batch['target']
         # target = batch['seg']
-        # self.print_to_log_file(f"tttttttttttttttttttttttttttsssssssstttttttttttaaaaaaaaaaaarrrrrrrrrrrrrrrrrrtttttttttttttttttttttt")
 
         data = data.to(self.device, non_blocking=True)
         if isinstance(target, list):
@@ -1109,23 +1103,7 @@ class nnUNetTrainer(object):
             checkpoint_filename = f"checkpoint_epoch_{current_epoch + 1}.pth"  # 使用当前epoch的编号
             checkpoint_path = join(self.output_folder, checkpoint_filename)
             self.save_checkpoint(checkpoint_path)
-###############
-        if mean_first_seven > self._best_mean_first_seven:
-            self._best_mean_first_seven = mean_first_seven
-            self.print_to_log_file(f"Yayy! New best mean First Seven pseudo Dice: {np.round(self._best_mean_first_seven, decimals=4)}")
-            self.save_checkpoint(join(self.output_folder, 'checkpoint_best_mean_first_seven.pth'))
 
-        if mean_middle_twelve > self._best_mean_middle_twelve:
-            self._best_mean_middle_twelve = mean_middle_twelve
-            self.print_to_log_file(f"Yayy! New best mean Middle Twelve pseudo Dice: {np.round(self._best_mean_middle_twelve, decimals=4)}")
-            self.save_checkpoint(join(self.output_folder, 'checkpoint_best_mean_middle_twelve.pth'))
-            # handle 'best' checkpointing. ema_fg_dice is computed by the logger and can be accessed like this
-
-        if mean_last_six > self._best_mean_last_six:
-            self._best_mean_last_six = mean_last_six
-            self.print_to_log_file(f"Yayy! New best mean Last Six pseudo Dice: {np.round(self._best_mean_last_six, decimals=4)}")
-            self.save_checkpoint(join(self.output_folder, 'checkpoint_best_mean_last_six.pth'))
-#################
         if self._best_ema is None or self.logger.my_fantastic_logging['ema_fg_dice'][-1] > self._best_ema:
             self._best_ema = self.logger.my_fantastic_logging['ema_fg_dice'][-1]
             self.print_to_log_file(f"Yayy! New best EMA pseudo Dice: {np.round(self._best_ema, decimals=4)}")
@@ -1134,10 +1112,6 @@ class nnUNetTrainer(object):
         if self._best_mean is None or self.logger.my_fantastic_logging['mean_fg_dice'][-1] > self._best_mean:
             self._best_mean = self.logger.my_fantastic_logging['mean_fg_dice'][-1]
             self.print_to_log_file(f"OKKK! New best MEAN pseudo Dice: {np.round(self._best_mean, decimals=4)}")
-#########################
-            checkpoint_filename_1 = f"checkpoint_best_mean_fg_dice.pth"
-            checkpoint_path = join(self.output_folder, checkpoint_filename_1)
-#########################  
             group_number = (current_epoch + 1) // 100
             checkpoint_filename = f"checkpoint_best_group_{group_number}_epoch.pth"
             checkpoint_path = join(self.output_folder, checkpoint_filename)
@@ -1182,7 +1156,7 @@ class nnUNetTrainer(object):
             self.initialize()
         if isinstance(filename_or_checkpoint, str):
             checkpoint = torch.load(filename_or_checkpoint, map_location=self.device)
-            # print("llllllllllllllllllooooooooooo-----------------------------")
+
         # if state dict comes from nn.DataParallel but we use non-parallel model here then the state dict keys do not
         # match. Use heuristic to make it match
             new_state_dict = {}
@@ -1227,10 +1201,7 @@ class nnUNetTrainer(object):
     def perform_actual_validation(self, save_probabilities: bool = False):
         self.set_deep_supervision_enabled(False)
         self.network.eval()
-##############################
         predictor = nnUNetPredictor(tile_step_size=0.5, use_gaussian=True, use_mirroring=True,
-#########################################        
-        # predictor = nnUNetPredictor(tile_step_size=0.5, use_gaussian=False, use_mirroring=False,
                                     perform_everything_on_device=True, device=self.device, verbose=False,
                                     verbose_preprocessing=False, allow_tqdm=False)
         predictor.manual_initialization(self.network, self.plans_manager, self.configuration_manager, None,
@@ -1240,9 +1211,6 @@ class nnUNetTrainer(object):
         with multiprocessing.get_context("spawn").Pool(default_num_processes) as segmentation_export_pool:
             worker_list = [i for i in segmentation_export_pool._pool]
             validation_output_folder = join(self.output_folder, 'validation')
-            # validation_output_folder = join(self.output_folder, 'validation_group10_1')
-            # validation_output_folder = join(self.output_folder, 'validation_group11_2')
-            # validation_output_folder = join(self.output_folder, 'validation_group10_2')
             maybe_mkdir_p(validation_output_folder)
 
             # we cannot use self.get_tr_and_val_datasets() here because we might be DDP and then we have to distribute
@@ -1327,8 +1295,6 @@ class nnUNetTrainer(object):
                         output_folder = join(self.output_folder_base, 'predicted_next_stage', n)
                         output_file = join(output_folder, k + '.npz')
 
-                        # resample_and_save(prediction, target_shape, output_file, self.plans_manager, self.configuration_manager, properties,
-                        #                   self.dataset_json)
                         results.append(segmentation_export_pool.starmap_async(
                             resample_and_save, (
                                 (prediction, target_shape, output_file, self.plans_manager,
@@ -1360,11 +1326,8 @@ class nnUNetTrainer(object):
         compute_gaussian.cache_clear()
 
     def run_training(self):
-        #checkpoint_latest = os.path.join(self.output_folder, 'checkpoint_epoch_950.pth')
         checkpoint_latest = os.path.join(self.output_folder, 'checkpoint_latest.pth')
-        # checkpoint_latest = os.path.join(self.output_folder, 'checkpoint_epoch_200.pth')
-        # checkpoint_latest = os.path.join(self.output_folder, 'checkpoint_epoch_550.pth')
-        # print(checkpoint_latest,"------------------------------ooooooooooooooooooooooo")
+
         if os.path.isfile(checkpoint_latest):
             resume_training = self.load_checkpoint(checkpoint_latest)
         else:
@@ -1388,55 +1351,6 @@ class nnUNetTrainer(object):
             train_outputs = []
             for batch_id in range(self.num_iterations_per_epoch):
                 train_outputs.append(self.train_step(next(self.dataloader_train)))
-            #######################------------------------test------------------------
-            # self.print_to_log_file(f"learning-------------------------------------------.")
-            # if len(self.dataloader_train._data) == 0:
-            #     self.print_to_log_file("Error: DataLoader contains no data.")
-            #     return
-            # else:
-            #     self.print_to_log_file(f"DataLoader has {len(self.dataloader_train._data)} items.")
-            # # for batch_id in range(self.num_iterations_per_epoch):
-            # #     train_outputs.append(self.train_step(next(self.dataloader_train)))
-
-            # # self.print_to_log_file(f"num--------------------------: {len(self.dataloader_train)}")
-            # # self.print_to_log_file(f"num--------------------------: {len(self.dataloader_train.dataset)}")
-            # iterator = iter(self.dataloader_train)
-            # for batch_id in range(self.num_iterations_per_epoch):
-            #     self.print_to_log_file(f"--------------------iteration")
-            #     self.print_to_log_file(f"Iteration {batch_id+1}/{self.num_iterations_per_epoch}")
-                
-            #     try:
-            #         # 检查 DataLoader 是否返回了正确的数据
-            #         self.print_to_log_file(f"Fetching data from dataloader... (batch {batch_id+1})")
-            #         # data = next(self.dataloader_train)
-            #         data = next(iterator)
-            #         self.print_to_log_file(f"Data loaded successfully. Data type: {type(data)}, Data keys: {data.keys() if isinstance(data, dict) else 'N/A'}")
-            #         self.print_to_log_file(f"Data content: {data}")
-            #     except StopIteration:
-            #         self.print_to_log_file("DataLoader is empty!")
-            #         break  # 如果 DataLoader 为空，结束循环
-            #     except Exception as e:
-            #         self.print_to_log_file(f"Error while fetching data: {e}")
-            #         continue
-                
-            #     try:
-            #         # 输出数据的形状和类型，以便确认数据是否符合预期
-            #         if isinstance(data, dict):
-            #             for key, value in data.items():
-            #                 self.print_to_log_file(f"Data[{key}] shape: {value.shape if hasattr(value, 'shape') else 'N/A'}")
-            #         else:
-            #             self.print_to_log_file(f"Data shape: {data.shape if hasattr(data, 'shape') else 'N/A'}")
-                    
-            #         # 检查 train_step 是否正常运行
-            #         self.print_to_log_file(f"Calling train_step...")
-            #         output = self.train_step(data)
-            #         self.print_to_log_file(f"train_step output: {output}")
-            #         train_outputs.append(output)
-            #     except Exception as e:
-            #         self.print_to_log_file(f"Error in training step: {e}")
-            ###################################test-------------------------
-                
-
 
             self.on_train_epoch_end(train_outputs)
 
