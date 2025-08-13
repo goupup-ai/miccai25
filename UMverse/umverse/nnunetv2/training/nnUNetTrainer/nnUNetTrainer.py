@@ -179,13 +179,8 @@ class nnUNetTrainer(object):
         self.dataloader_train = self.dataloader_val = None  # see on_train_start
 
         ### initializing stuff for remembering things and such
-        self._ccc_ema = None
+        self._best_ema = None
         self._best_mean = None
-##########
-        self._best_mean_first_seven = 0
-        self._best_mean_middle_twelve = 0 
-        self._best_mean_last_six = 0
-##########
 
         ### inference things
         self.inference_allowed_mirroring_axes = None  # this variable is set in
