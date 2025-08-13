@@ -15,7 +15,11 @@ Network for Efficient Vertebrae Segmentation</h1>
     ·
     <a href="https://scholar.google.com/citations?user=MfbIbuEAAAAJ&hl=zh-CN" rel="external nofollow noopener" target="_blank"><strong>Pingping Zhang*</strong></a>
     ·
+    <a target="_blank"><strong>Hongli Zhang</strong></a>
+    ·
     <a href="https://scholar.google.com/citations?user=rgtOrCMAAAAJ&hl=zh-CN&oi=sra" rel="external nofollow noopener" target="_blank"><strong>Rui Xu</strong></a>
+    ·
+    <a target="_blank"><strong>Haojie Li</strong></a>
   </p>
 <p align="center">
     <a href="https://arxiv.org/pdf/2506.23086" rel="external nofollow noopener" target="_blank">MICCAI 2025 Paper</a>
@@ -114,10 +118,10 @@ conda activate UMverse
 pip install torch==2.0.1 torchvision==0.15.2 torchaudio==2.0.2
 cd (your_path)
 pip install -r requirements.txt
-cd (your_path/umamba)
+cd (your_path/umverse)
 pip install -e .
 nnUNetv2_plan_and_preprocess -d DATASET_ID --verify_dataset_integrity
-nnUNetv2_train DATASET_ID 3d_fullres 0 -tr nnUNetTrainerUM
+nnUNetv2_train DATASET_ID 3d_fullres 0 -tr nnUNetTrainerUMverse
 ```
 
 ---
