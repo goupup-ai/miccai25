@@ -138,3 +138,8 @@ If you find **FMC-Net** helpful in your research, please consider citing:
   year={2025}
 }
 ```
+## 🙏 Acknowledgement
+- We thank all medical workers and dataset owners for making public datasets available to the community.
+- Thanks to the open-source of the following projects:
+  - [nnUNet](https://github.com/MIC-DKFZ/nnUNet)
+  - [U-Mamba](https://github.com/bowang-lab/U-Mamba)
